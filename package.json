@@ -1,11 +1,11 @@
 {
-  "name": "chatroom",
+  "name": "legendary-octo-journey",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "lint": "eslint --fix ./**/*.js",
+    "lint": "eslint --fix ./**/*.js app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
