@@ -7,8 +7,9 @@ export default function ChatContainer(props) {
 
     return (
         <div className="rounded h-100 p-3" style={{backgroundColor: 'rgba(0, 181, 204, 0.2)'}}>
-            <MessageReceived message='yoyoyo'/>
-            <MessageSent message='whut'/>
+            {props.messages.map(m => {
+                return m.inbound ? <MessageReceived message={m.message}/> : <MessageSent message={m.message}/>
+            })}
         </div>
     )
 }
