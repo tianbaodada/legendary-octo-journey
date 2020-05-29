@@ -22,7 +22,7 @@ io.use((socket, next) => {
 });
 
 app.use(sessionMiddleware);
-app.use(express.static(path.join(__dirname, 'react/build')));
+app.use(express.static(path.join(__dirname, 'build')));
 // app.use(express.static(path.join(__dirname, 'public')));
 
 function queueLine(socket) {
