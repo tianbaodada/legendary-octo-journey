@@ -28,15 +28,18 @@ app.use(express.static(path.join(__dirname, 'build')));
 function queueLine(socket) {
   if (QUEUE.length) {
     const peer = QUEUE[0];
-    if (peer.request.sessionID !== socket.request.sessionID) {
+    const { sessionID: ssId } = socket.request;
+    const { sessionID: ppId } = peer.request;
+    
+    if (ppId !== ssId) {
       QUEUE.splice(0, 1);
-      const roomId = `${socket.request.sessionID}#${peer.request.sessionID}`;
+      const roomId = `${ssId}#${ppId}`;
 
       peer.join(roomId);
       socket.join(roomId);
 
-      ROOMS[peer.request.sessionID] = roomId;
-      ROOMS[socket.request.sessionID] = roomId;
+      ROOMS[ppId] = roomId;
+      ROOMS[ssId] = roomId;
 
       io.to(roomId).emit('connectSuccess', roomId);
     }
@@ -46,34 +49,35 @@ function queueLine(socket) {
 }
 
 io.on('connection', (socket) => {
-  SOCKETS[socket.request.sessionID] = socket;
+  const { sessionID: ssId } = socket.request;
+  SOCKETS[ssId] = socket;
   socket.on('chat start', () => {
     queueLine(socket);
   });
 
   socket.on('chat end', () => {
-    const roomId = ROOMS[socket.request.sessionID];
+    const roomId = ROOMS[ssId];
     if (roomId) {
       socket.broadcast.to(roomId).emit('chat end');
-      delete ROOMS[socket.request.sessionID];
+      delete ROOMS[ssId];
       // const peerIds = roomId.split('#');
-      // const peerId = peerIds[0] === socket.request.sessionID ? peerIds[1] : peerIds[0];
+      // const peerId = peerIds[0] === ssId ? peerIds[1] : peerIds[0];
       // queueLine(SOCKETS[peerId]);
     }
   });
 
   socket.on('chat message', (msg) => {
-    const roomId = ROOMS[socket.request.sessionID];
+    const roomId = ROOMS[ssId];
     if (roomId) {
       socket.broadcast.to(roomId).emit('chat message', msg);
     }
   });
 
   socket.on('disconnect', () => {
-    const roomId = ROOMS[socket.request.sessionID];
+    const roomId = ROOMS[ssId];
     if (roomId) {
       socket.broadcast.to(roomId).emit('chat end');
-      delete ROOMS[socket.request.sessionID];
+      delete ROOMS[ssId];
     }
   });
 });
