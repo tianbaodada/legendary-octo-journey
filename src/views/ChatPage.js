@@ -8,8 +8,6 @@ export default function ChatPage(props) {
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([])
 
-    let room = '';
-
     useEffect(() => {
         socket.on('chat message', msg => {
             console.log('on chat message', msg)
@@ -17,7 +15,6 @@ export default function ChatPage(props) {
         });
         socket.on('connectSuccess', function(roomId){
             setConnected(true)
-            room = roomId;
             console.log(`A user is connected, ${roomId}`)
         });
         socket.on('chat end', function(){
