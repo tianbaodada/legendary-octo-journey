@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap'
 import ChatContainer from './ChatContainer';
 import {socket} from "../utils/socket";
+import moment from 'moment';
 
 export default function ChatPage(props) {
     const [inputVal, setInputVal] = useState('');
@@ -11,7 +12,7 @@ export default function ChatPage(props) {
     useEffect(() => {
         socket.on('chat message', msg => {
             console.log('on chat message', msg)
-            setMessages(oldMessages => [...oldMessages, {message: msg, inbound: true}])
+            setMessages(oldMessages => [...oldMessages, {message: msg, inbound: true, date: moment()}])
         });
         socket.on('connectSuccess', function(roomId){
             setConnected(true)
@@ -21,7 +22,7 @@ export default function ChatPage(props) {
             setConnected(true)
             msg.forEach((item) => {
                 setMessages(oldMessages => {
-                    return [...oldMessages, {message: item.msg, inbound: item.sender === 'him' ? true : false}]
+                    return [...oldMessages, {message: item.msg, inbound: item.sender === 'him' ? true : false, date: moment(item.date)}]
                 })
             })
             console.log(msg);
@@ -51,7 +52,7 @@ export default function ChatPage(props) {
         if (connected) {
             console.log('sending msg', inputVal);
             socket.emit('chat message', inputVal);
-            setMessages(oldMessages => [...oldMessages, {message: inputVal, inbound: false}])
+            setMessages(oldMessages => [...oldMessages, {message: inputVal, inbound: false, date: moment()}])
         }
         return false;
     }
