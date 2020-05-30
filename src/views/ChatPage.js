@@ -19,6 +19,11 @@ export default function ChatPage(props) {
         });
         socket.on('chat history', msg => {
             setConnected(true)
+            msg.forEach((item) => {
+                setMessages(oldMessages => {
+                    return [...oldMessages, {message: item.msg, inbound: item.sender === 'him' ? true : false}]
+                })
+            })
             console.log(msg);
         });
         socket.on('chat end', function(){
