@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, InputGroup, FormControl } from 'react-bootstrap'
+import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap'
 import ChatContainer from './ChatContainer';
 import {socket} from "../utils/socket";
 
@@ -51,12 +51,18 @@ export default function ChatPage(props) {
 
     return (
         <div className="vh-100">
-            <h1 className="serif ml-4" style={{display: 'inline-block'}}>Legendary OCTO Journey</h1>
-            <div className="float-right mr-4 mt-2">
-                <Button className="mr-2" variant="danger" onClick={leaveChat}>離開</Button>
-                <Button variant="info" onClick={startChat}>開始</Button>
-            </div>
-            <div className="mx-4" style={{height: '85%'}}>
+            <Row>
+                <Col md={4}>
+                    <h1 className="serif ml-4" style={{display: 'inline-block'}}>Legendary OCTO Journey</h1>
+                </Col>
+                <Col md={{ span: 4, offset: 4 }}>
+                    <div className="float-right mr-4 mt-2">
+                        <Button className="mr-2" variant="danger" onClick={leaveChat}>離開</Button>
+                        <Button variant="info" onClick={startChat}>開始</Button>
+                    </div>
+                </Col>
+            </Row>
+            <div className="mt-2 mx-4" style={{height: '85%'}}>
                 <ChatContainer messages={messages} />
                 <InputGroup className="mb-3" value={inputVal} onChange={(e)=>setInputVal(e.target.value)}>
                     <FormControl/>

@@ -10,7 +10,7 @@
   background-color: #82ccdd;
   padding: 10px;
   position: relative;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .msg_cotainer_send{
@@ -21,24 +21,16 @@
   background-color: #78e08f;
   padding: 10px;
   position: relative;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .msg_time{
-  position: absolute;
-  left: 0;
-  bottom: -15px;
   color: rgba(0,0,0,0.5);
-  /* color: rgba(255,255,255,0.5); */
   font-size: 10px;
 }
 
 .msg_time_send{
-  position: absolute;
-  right:0;
-  bottom: -15px;
   color: rgba(0,0,0,0.5);
-  /* color: rgba(255,255,255,0.5); */
   font-size: 10px;
 }
 
