@@ -17,11 +17,13 @@ export default function ChatPage(props) {
             setConnected(true)
             console.log(`A user is connected, ${roomId}`)
         });
+        socket.on('chat history', msg => {
+            setConnected(true)
+            console.log(msg);
+        });
         socket.on('chat end', function(){
             console.log('chat end')
-            if (connected) {
-                setConnected(false);
-            }
+            setConnected(false);
         });
     }, []);
 
