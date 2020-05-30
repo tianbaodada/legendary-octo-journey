@@ -5,6 +5,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const path = require('path');
 const session = require('express-session');
+const moment = require('moment');
 
 const sessionMiddleware = session({
   secret: 'fd639%(*&@(!ikqwq12#&wndlk',
@@ -66,7 +67,7 @@ io.on('connection', (socket) => {
       if (msg) {
         const Rmsg = msg.map((value,index,array) => {
           const sender = value.ssId === ssId ? 'me' : 'him';
-          return {sender, msg: value.msg};
+          return {sender, ...value};
         })
         socket.emit('chat history', Rmsg);
       }
@@ -100,7 +101,7 @@ io.on('connection', (socket) => {
       
       // 對話時將歷史訊息存入MESSAGES
       if(!MESSAGES[roomId]) MESSAGES[roomId] = [];
-      MESSAGES[roomId].push({ssId, msg});
+      MESSAGES[roomId].push({ssId, msg, date: moment()});
     } else {
       // 異常狀態, 該對話直接結束, 使用者須重新連接
       socket.emit('chat end');
