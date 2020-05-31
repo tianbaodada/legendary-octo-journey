@@ -6,8 +6,8 @@ import {socket} from "../utils/socket";
 import moment from 'moment';
 
 export default function ChatPage(props) {
-    const [inputVal, setInputVal] = useState('請按下開始');
-    const [info, setInfo] = useState('');
+    const [inputVal, setInputVal] = useState('');
+    const [info, setInfo] = useState('請按下開始');
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([])
 
