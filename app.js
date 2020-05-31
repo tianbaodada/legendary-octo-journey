@@ -44,7 +44,7 @@ function queueLine(socket) {
       ROOMS[ssId] = roomId;
       MESSAGES[roomId] = [];
 
-      io.to(roomId).emit('connectSuccess', roomId);
+      io.to(roomId).emit('connectSuccess');
     }
   } else {
     QUEUE.push(socket);
@@ -65,9 +65,9 @@ io.on('connection', (socket) => {
       const msg = MESSAGES[roomId];
       // 若有找到曾加入的room, 將該room的對話紀錄傳給前端
       if (msg) {
-        const Rmsg = msg.map((value,index,array) => {
-          const sender = value.ssId === ssId ? 'me' : 'him';
-          return {sender, ...value};
+        const Rmsg = msg.map((value) => {
+          const inbound = value.ssId === ssId ? false : true;
+          return {inbound, msg: value.msg, date: value.date};
         })
         socket.emit('chat history', Rmsg);
       }
