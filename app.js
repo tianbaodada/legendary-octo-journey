@@ -7,6 +7,8 @@ const path = require('path');
 const session = require('express-session');
 const moment = require('moment');
 
+const port = process.env.PORT || 3000;
+
 const sessionMiddleware = session({
   secret: 'fd639%(*&@(!ikqwq12#&wndlk',
   resave: false,
@@ -111,7 +113,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {});
 });
 
-http.listen(3000, () => {
+http.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log('Example app listening on http://localhost:3000');
 });

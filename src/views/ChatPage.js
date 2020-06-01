@@ -75,7 +75,7 @@ export default function ChatPage(props) {
         <div className="vh-100">
             <Row>
                 <Col md={4}>
-                    <h1 className="serif ml-4" style={{display: 'inline-block'}}>Legendary OCTO Journey</h1>
+                    <h1 className="serif ml-4" style={{display: 'inline-block'}}>BONBON</h1>
                 </Col>
                 <Col md={{ span: 4, offset: 4 }}>
                     <div className="float-right mr-4 mt-2">
