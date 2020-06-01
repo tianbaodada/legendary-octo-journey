@@ -29,14 +29,15 @@ app.use(sessionMiddleware);
 app.use(express.static(path.join(__dirname, 'build')));
 // app.use(express.static(path.join(__dirname, 'public')));
 
-function queueLine(socket) {
+function enQueue(socket) {
   if (QUEUE.length) {
-    const peer = QUEUE[0];
     const { sessionID: ssId } = socket.request;
-    const { sessionID: ppId } = peer.request;
-    
-    if (ppId !== ssId) {
-      QUEUE.splice(0, 1);
+
+    const ppIdx = QUEUE.findIndex(v => v.request.sessionID !== ssId);
+
+    if (ppIdx > -1) {
+      const [peer] = QUEUE.splice(ppIdx, 1);
+      const { sessionID: ppId } = peer.request;
       const roomId = `${ssId}#${ppId}`;
 
       peer.join(roomId);
@@ -77,7 +78,7 @@ io.on('connection', (socket) => {
   }
 
   socket.on('chat start', () => {
-    queueLine(socket);
+    enQueue(socket);
   });
 
   socket.on('chat end', () => {
@@ -85,8 +86,14 @@ io.on('connection', (socket) => {
     if (roomId) {
       socket.broadcast.to(roomId).emit('chat end');
 
+      socket.leave(roomId);
+      const peerIds = roomId.split('#');
+      const ppId = peerIds[0] === ssId ? peerIds[1] : peerIds[0];
+      SOCKETS[ppId].leave(roomId)
+      
       //只要其中一方按下離開, 刪除該room及對話紀錄
       delete ROOMS[ssId];
+      delete ROOMS[ppId];
       delete MESSAGES[roomId];
 
       // 其中一方離開時, 讓另一方自動連接下一個使用者
@@ -110,7 +117,21 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {});
+  socket.on('disconnect', () => {
+    const { sessionID: ssId } = socket.request;
+
+    // 在排隊期間按下重整或關閉, 須重新排隊
+    const ssIdx = QUEUE.findIndex(v => ssId === v.request.sessionID);
+    if (ssIdx > -1) {
+      QUEUE.splice(ssIdx, 1);
+    }
+
+    // 離開但不刪除room, 重新連接時再將其加入
+    const roomId = ROOMS[ssId];
+    if (roomId) {
+      socket.leave(roomId);
+    }
+  });
 });
 
 http.listen(port, () => {
