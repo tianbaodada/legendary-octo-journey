@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function MessageReceived(props) {
 
@@ -8,12 +8,12 @@ export default function MessageReceived(props) {
 
     return (
         <React.Fragment>
-            <div className="d-flex justify-content-start">
+            <div className="align-self-start">
                 <div className="msg_cotainer">
                     {message}
                 </div>
             </div>
-            <span className="d-flex justify-content-start msg_time_send">{timeStamp || TIME_STAMP_TEMPLATE}</span>
+            <span className="align-self-start msg_time_send">{timeStamp || TIME_STAMP_TEMPLATE}</span>
         </React.Fragment>
     )
 }

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function ChatInfo(props) {
     return (
-        <div style={{ display: "block" }} >
-            {props.showMsg && `${props.showMsg}`}
+        <div className="align-self-center">
+                {props.showMsg && `${props.showMsg}`}
         </div>
     )
 }
