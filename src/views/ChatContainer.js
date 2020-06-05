@@ -16,7 +16,7 @@ export default function ChatContainer({messages, info}) {
 
     return (
         <div 
-            className="d-flex flex-column justify-content-end overflow-auto rounded h-100 p-3" 
+            className="overflow-auto rounded h-100 p-3" 
             style={{backgroundColor: 'rgba(0, 181, 204, 0.2)'}}
         >
             <ChatInfo showMsg={info.welcomeMsg} />

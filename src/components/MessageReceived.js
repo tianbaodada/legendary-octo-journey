@@ -8,12 +8,12 @@ export default function MessageReceived(props) {
 
     return (
         <React.Fragment>
-            <div className="align-self-start">
+            <div className="d-flex justify-content-start">
                 <div className="msg_cotainer">
                     {message}
                 </div>
             </div>
-            <span className="align-self-start msg_time_send">{timeStamp || TIME_STAMP_TEMPLATE}</span>
+            <span className="d-flex justify-content-start msg_time_send">{timeStamp || TIME_STAMP_TEMPLATE}</span>
         </React.Fragment>
     )
 }
