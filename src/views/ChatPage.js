@@ -60,18 +60,18 @@ export default function ChatPage(props) {
 
     return (
         <div className="vh-100">
-            <Row>
+            <Row className="fixed-top" style={{top: '10px'}}>
                 <Col md={4} sm={4} xs={4}>
                     <h1 className="serif ml-4" style={{display: 'inline-block'}}>BONBON</h1>
                 </Col>
-                <Col md={{ span: 4, offset: 4 }} sm={{ span: 4, offset: 4 }} xs={{ span: 6, offset: 2 }}>
+                <Col md={{ span: 4, offset: 4 }} sm={{ span: 4, offset: 4 }} xs={8}>
                     <div className="float-right mr-4 mt-2">
                         <Button className="mr-2" variant="danger" onClick={leaveChat}>離開</Button>
                         <Button variant="info" onClick={startChat}>開始</Button>
                     </div>
                 </Col>
             </Row>
-            <div className="mt-2 mx-4 fixed-bottom" style={{ height: '85%', bottom: '70px' }}>
+            <div className="mt-2 mx-4 fixed-bottom" style={{ height: '77%', bottom: '70px' }}>
                 <ChatContainer messages={messages} info={info}/>
                 <InputGroup className="mb-3" value={inputVal} onChange={(e) => setInputVal(e.target.value.trim())} key={key}>
                     <FormControl />
