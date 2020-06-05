@@ -6,8 +6,7 @@ import moment from 'moment';
 
 export default function ChatPage(props) {
     const [inputVal, setInputVal] = useState('');
-    const [welcomeMsg, setWelcomeMsg] = useState('請按下開始');
-    const [leaveMsg, setleaveMsg] = useState('');
+    const [info, setInfo] = useState({ welcomeMsg: '請按下開始', leaveMsg: '' });
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
     const [key, setKey] = useState('');
@@ -16,19 +15,16 @@ export default function ChatPage(props) {
         socket.on('chat message', msg => setMessages(oldMessages => [...oldMessages, {message: msg, inbound: true, date: moment()}]));
         socket.on('connectSuccess', () => {
             setConnected(true)
-            setWelcomeMsg('連線成功, 請開始你的表演');
-            setleaveMsg('');
+            setInfo({ welcomeMsg: '連線成功, 請開始你的表演', leaveMsg: '' });
         });
         socket.on('chat history', msg => {
             setConnected(true);
-            setWelcomeMsg('連線成功, 請開始你的表演');
-            setleaveMsg('');
+            setInfo({ welcomeMsg: '連線成功, 請開始你的表演', leaveMsg: '' });
             setMessages([]);
             msg.forEach(item => setMessages(oldMessages => [...oldMessages, {message: item.msg, inbound: item.inbound, date: moment(item.date)}]));
         });
         socket.on('chat end', () => {
-            setWelcomeMsg('');
-            setleaveMsg('對方離開了, 請按下開始');
+            setInfo({ welcomeMsg: '', leaveMsg: '對方離開了, 請按下開始' });
             setConnected(false);
         });
     }, []);
@@ -36,8 +32,7 @@ export default function ChatPage(props) {
     const startChat = () => {
         if (!connected) {
             setMessages([]);
-            setWelcomeMsg('連線中...');
-            setleaveMsg('');
+            setInfo({ welcomeMsg: '連線中', leaveMsg: '' });
             socket.emit('chat start');
         }
     }
@@ -46,8 +41,7 @@ export default function ChatPage(props) {
         if (connected) {
             setConnected(false);
             setMessages([]);
-            setWelcomeMsg('');
-            setleaveMsg('已離開, 請按下開始');
+            setInfo({ welcomeMsg: '', leaveMsg: '已離開, 請按下開始' });
             socket.emit('chat end');
         }
     }
@@ -67,20 +61,20 @@ export default function ChatPage(props) {
     return (
         <div className="vh-100">
             <Row>
-                <Col md={4}>
+                <Col md={4} sm={4} xs={4}>
                     <h1 className="serif ml-4" style={{display: 'inline-block'}}>BONBON</h1>
                 </Col>
-                <Col md={{ span: 4, offset: 4 }}>
+                <Col md={{ span: 4, offset: 4 }} sm={{ span: 4, offset: 4 }} xs={{ span: 6, offset: 2 }}>
                     <div className="float-right mr-4 mt-2">
                         <Button className="mr-2" variant="danger" onClick={leaveChat}>離開</Button>
                         <Button variant="info" onClick={startChat}>開始</Button>
                     </div>
                 </Col>
             </Row>
-            <div className="mt-2 mx-4" style={{height: '85%'}}>
-                <ChatContainer messages={messages} welcomeMsg={welcomeMsg} leaveMsg={leaveMsg}/>
-                <InputGroup className="mb-3" value={inputVal} onChange={(e)=>setInputVal(e.target.value.trim())} key={key}>
-                    <FormControl/>
+            <div className="mt-2 mx-4 fixed-bottom" style={{ height: '85%', bottom: '70px' }}>
+                <ChatContainer messages={messages} info={info}/>
+                <InputGroup className="mb-3" value={inputVal} onChange={(e) => setInputVal(e.target.value.trim())} key={key}>
+                    <FormControl />
                     <InputGroup.Append>
                         <Button variant="outline-secondary" onClick={sendMessage}>送出</Button>
                     </InputGroup.Append>

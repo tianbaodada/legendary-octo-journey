@@ -4,7 +4,7 @@ import MessageSent from '../components/MessageSent.js'
 import ChatInfo from './ChatInfo';
 import moment from 'moment'
 
-export default function ChatContainer({messages, welcomeMsg, leaveMsg}) {
+export default function ChatContainer({messages, info}) {
 
     const messagesEndRef = useRef(null)
 
@@ -19,12 +19,12 @@ export default function ChatContainer({messages, welcomeMsg, leaveMsg}) {
             className="d-flex flex-column justify-content-end overflow-auto rounded h-100 p-3" 
             style={{backgroundColor: 'rgba(0, 181, 204, 0.2)'}}
         >
-            <ChatInfo showMsg={welcomeMsg}/>
+            <ChatInfo showMsg={info.welcomeMsg} />
             {messages && messages.map(m => {
                 const timeStamp = moment(m.date).fromNow();
-                return m.inbound ? <MessageReceived message={m.message} timeStamp={timeStamp}/> : <MessageSent message={m.message} timeStamp={timeStamp}/>
+                return m.inbound ? <MessageReceived message={m.message} timeStamp={timeStamp} /> : <MessageSent message={m.message} timeStamp={timeStamp} />
             })}
-            <ChatInfo showMsg={leaveMsg}/>
+            <ChatInfo showMsg={info.leaveMsg} />
             <div ref={messagesEndRef} />
         </div>
     )
